@@ -82,6 +82,19 @@ const char * Udp::getBuffer(void) const {
     return (const char *)&this->bitmap[0];
 }
 
+// Blocking
+void Udp::getBufferCoppy(char * copy) {
+
+    if (this->mutex.tryLock()) {
+
+        memcpy(copy, &this->bitmap, sizeof(this->bitmap));
+
+        this->mutex.unlock();
+
+    }
+
+}
+
 void Udp::setAddr(QHostAddress addr) {
     this->sender = addr;
 }

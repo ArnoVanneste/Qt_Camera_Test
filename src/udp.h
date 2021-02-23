@@ -15,6 +15,7 @@ class Udp : public QObject
 public:
     Udp();
     const char * getBuffer(void) const;
+    void getBufferCoppy(char * copy);
     QMutex mutex;
     QString getFps(void);
 
