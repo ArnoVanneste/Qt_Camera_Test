@@ -41,5 +41,7 @@ private:
 private slots:
     void hasToRender(void);
 
+    void on_find_corners_clicked(bool checked);
+    void on_find_corners_clicked();
 };
 #endif // MAINWINDOW_H

@@ -15,10 +15,12 @@ void Customlable::paintEvent(QPaintEvent *event)
     paint.begin(this);
     paint.setPen(QPen(Qt::red, 1, Qt::SolidLine, Qt::RoundCap));
 
-    for (unsigned index = 0; index < this->points.size(); index++) {
-        const unsigned x = this->points[index].x;
-        const unsigned y = this->points[index].y;
-        paint.drawEllipse(QRectF(x, y, 5, 5));
+    if (this->drawPoints) {
+        for (unsigned index = 0; index < this->points.size(); index++) {
+            const unsigned x = this->points[index].x;
+            const unsigned y = this->points[index].y;
+            paint.drawEllipse(QRectF(x, y, 5, 5));
+        }
     }
 
     paint.end();

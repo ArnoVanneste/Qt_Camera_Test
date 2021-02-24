@@ -7,11 +7,15 @@
 #include <QThread>
 #include <iostream>
 
+#include <chrono>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    ui->find_corners->setCheckable(true);
 
     server = new Udp();
     server->chooseCam();
@@ -46,8 +50,6 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     checkerboard.start();
-
-    chtimer->start(500);
 
 }
 
@@ -85,4 +87,16 @@ const QImage & MainWindow::getImage(){
 
     return image;
 
+}
+
+
+void MainWindow::on_find_corners_clicked(bool checked)
+{
+    if (checked) {
+        chtimer->start(500);
+        ui->label_img->drawPoints = true;
+    } else {
+        chtimer->stop();
+        ui->label_img->drawPoints = false;
+    }
 }

@@ -95,6 +95,19 @@
      <string>IP: </string>
     </property>
    </widget>
+   <widget class="QPushButton" name="find_corners">
+    <property name="geometry">
+     <rect>
+      <x>1300</x>
+      <y>200</y>
+      <width>170</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Find Corners</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -15,7 +15,8 @@ class Customlable : public QLabel
 public:
 
     Customlable(QWidget *parent)
-        : QLabel(parent)
+        : QLabel(parent),
+          drawPoints(false)
     {}
 
     ~Customlable()
@@ -23,6 +24,7 @@ public:
 
 public:
     void setPoints(const std::vector<cv::Point2f>& points);
+    bool drawPoints;
 
 protected:
     void paintEvent(QPaintEvent *event);

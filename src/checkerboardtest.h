@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QImage>
+#include <QFile>
+#include <QTextStream>
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -23,13 +25,18 @@ class Checkerboardtest : public QObject
 public:
     Checkerboardtest();
 
-    std::vector<cv::Point2f> calc(QImage img);
+    std::vector<cv::Point2f> calc(const QImage& img);
 
-    cv::Mat qimage_to_mat(QImage &img, int format);
+    cv::Mat qimage_to_mat(const QImage& img, int format);
 
 private:
     int CHECKERBOARD[2];
     QImage *image;
+
+    std::vector<std::vector<cv::Point3f> > objpoints;
+    std::vector<std::vector<cv::Point2f> > imgpoints;
+    std::vector<cv::Point3f> objp;
+
 };
 
 #endif // CHECKERBOARDTEST_H
