@@ -43,5 +43,13 @@ private slots:
 
     void on_find_corners_clicked(bool checked);
     void on_find_corners_clicked();
+    void on_show_roi_clicked(bool checked);
+    void on_pushButton_clicked();
+    void on_increase_roi_clicked();
+    void on_increase_roi_width_clicked();
+    void on_show_roi_clicked();
+    void on_decrease_roi_width_clicked();
+    void on_increase_roi_height_clicked();
+    void on_decrease_roi_height_clicked();
 };
 #endif // MAINWINDOW_H

@@ -72,6 +72,8 @@ std::vector<cv::Point2f> Checkerboardtest::calc(const QImage& image) {
 
         return corner_pts;
 
+    } else {
+        return corner_pts;
     }
 
 }

@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->find_corners->setCheckable(true);
+    ui->show_roi->setCheckable(true);
 
     server = new Udp();
     server->chooseCam();
@@ -100,3 +101,44 @@ void MainWindow::on_find_corners_clicked(bool checked)
         ui->label_img->drawPoints = false;
     }
 }
+
+void MainWindow::on_show_roi_clicked(bool checked)
+{
+    if (checked) {
+        ui->label_img->showRoi = true;
+        ui->roi_width->setText("ROI width: " + QString::number(ui->label_img->getWidth()));
+        ui->roi_height->setText("ROI height: " + QString::number(ui->label_img->getHeight()));
+    } else {
+        ui->label_img->showRoi = false;
+    }
+}
+
+void MainWindow::on_increase_roi_width_clicked()
+{
+    ui->label_img->setWidth(ui->label_img->getWidth() + 5);
+    ui->label_img->center();
+    ui->roi_width->setText("ROI width: " + QString::number(ui->label_img->getWidth()));
+}
+
+void MainWindow::on_decrease_roi_width_clicked()
+{
+    ui->label_img->setWidth(ui->label_img->getWidth() - 5);
+    ui->label_img->center();
+    ui->roi_width->setText("ROI width: " + QString::number(ui->label_img->getWidth()));
+}
+
+void MainWindow::on_increase_roi_height_clicked()
+{
+    ui->label_img->setHeight(ui->label_img->getHeight() + 5);
+    ui->label_img->center();
+    ui->roi_height->setText("ROI height: " + QString::number(ui->label_img->getHeight()));
+}
+
+void MainWindow::on_decrease_roi_height_clicked()
+{
+    ui->label_img->setHeight(ui->label_img->getHeight() - 5);
+    ui->label_img->center();
+    ui->roi_height->setText("ROI height: " + QString::number(ui->label_img->getHeight()));
+}
+
+
