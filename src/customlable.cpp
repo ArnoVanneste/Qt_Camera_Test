@@ -6,7 +6,7 @@ Customlable::Customlable(QWidget *parent)
     showRoi = false;
     DEFAULT_WIDTH = 640;
     DEFAULT_HEIGHT = 512;
-    roi = QRect(((1280 - DEFAULT_WIDTH) / 2), ((1024 - DEFAULT_HEIGHT) / 2), DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    roi = QRect((DEFAULT_WIDTH / 4), (DEFAULT_HEIGHT / 4), DEFAULT_WIDTH / 2, DEFAULT_HEIGHT / 2);
 }
 
 void Customlable::setPoints(const std::vector<cv::Point2f>& points) {
@@ -25,8 +25,8 @@ void Customlable::paintEvent(QPaintEvent *event) {
 
     if (this->drawPoints) {
         for (unsigned index = 0; index < this->points.size(); index++) {
-            const unsigned x = this->points[index].x;
-            const unsigned y = this->points[index].y;
+            const unsigned x = this->points[index].x / 2;
+            const unsigned y = this->points[index].y / 2;
             paint.drawEllipse(QRectF(x, y, 5, 5));
         }
     }
@@ -117,6 +117,7 @@ void Customlable::center(void) {
 
 void Customlable::setRoiRect(QRect roi) {
     this->roi = roi;
+    this->update();
 }
 
 QRect Customlable::getRoiRect(void) {

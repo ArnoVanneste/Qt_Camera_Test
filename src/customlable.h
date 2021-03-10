@@ -31,6 +31,7 @@ public:
     void center(void);
     void setRoiRect(QRect roi);
     QRect getRoiRect(void);
+    QRect roi;
 
     bool drawPoints;
     bool showRoi;
@@ -39,8 +40,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
-    std::vector<cv::Point2f> points;
-    QRect roi;
+    std::vector<cv::Point2f> points;    
     int DEFAULT_WIDTH;
     int DEFAULT_HEIGHT;
 };

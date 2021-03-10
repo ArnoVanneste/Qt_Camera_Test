@@ -9,6 +9,7 @@
 #include "customlable.h"
 #include "udp.h"
 #include "checkerboardtest.h"
+#include "fpschart.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,6 +28,9 @@ public:
 public:
     const QImage & getImage();
 
+    enum ECameraModes {PICTURE_MODE, LASERMODE};
+    void setmode (ECameraModes mode);
+
 private:
     Ui::MainWindow *ui;
     Udp *server;
@@ -35,6 +39,10 @@ private:
     QTimer *chtimer;
     QPixmap pix;
     QImage image;
+    ECameraModes curCamMode;
+    FpsChart *fpsChart;
+
+    bool geenAntwoord;
 
     void renderPoints(const std::vector<cv::Point2f>& points) const;
 
@@ -42,14 +50,14 @@ private slots:
     void hasToRender(void);
 
     void on_find_corners_clicked(bool checked);
-    void on_find_corners_clicked();
     void on_show_roi_clicked(bool checked);
-    void on_pushButton_clicked();
-    void on_increase_roi_clicked();
-    void on_increase_roi_width_clicked();
-    void on_show_roi_clicked();
-    void on_decrease_roi_width_clicked();
-    void on_increase_roi_height_clicked();
-    void on_decrease_roi_height_clicked();
+    void on_switch_mode_clicked();
+    void on_fps_chart_clicked();
+    void on_test_clicked();
+    void on_set_gain_clicked();
+    void on_set_threshold_clicked();
+    void on_set_roi_clicked();
+    void on_reset_roi_clicked();
+    void on_confirm_roi_clicked();
 };
 #endif // MAINWINDOW_H

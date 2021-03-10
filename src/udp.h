@@ -14,16 +14,20 @@ class Udp : public QObject
 
 public:
     Udp();
+    ~Udp();
     const char * getBuffer(void) const;
+    const char * getLaser(void) const;
     void getBufferCoppy(char * copy);
     QMutex mutex;
-    QString getFps(void);
+
+    int getFps(void);
 
 signals:
     void hasToRender();
 
 public slots:
-    void sendData(QString addr);
+    void sendDataImg(QString addr);
+    void sendDataLaser(QString addr);
     void readyRead();
     void chooseCam();
 
@@ -35,6 +39,38 @@ public:
     void setAddr(QHostAddress addr);
     QString getAddr(void);
     QString getPosition(QString addr);
+    void writeReg(int address, unsigned short data);
+    void setRoi(int xstart, int xsize, int ystart, int ysize, int xinc, int yinc, int interl, int gain, int mode);
+    void setGain(int gain);
+    int getGain(void);
+    void setThreshold(int threshold);
+
+public:
+    int topleft_x = 0;
+    int topleft_y = 0;
+    int bottomright_x = 0;
+    int bottomright_y = 0;
+
+    void setTopleftX (int topleft_x);
+    int getTopleftX (void);
+
+    void setTopleftY (int topleft_y);
+    int getTopleftY (void);
+
+    void setBottomrightX (int bottomright_x);
+    int getBottomrightX (void);
+
+    void setBottomrightY (int bottomright_y);
+    int getBottomrightY (void);
+
+public:
+    enum {
+        SEND_VLASER=1,
+        SET_THRESHOLD=2,
+        SEND_LASER=4,
+        SEND_PICTURE=8,
+        FIND_MIDDLE=16,
+    } Mode;
 
 private:
     QUdpSocket *socket;
@@ -51,7 +87,15 @@ private:
     QString rightaddr = "192.168.2.4";
 
     int fps = 0;
+    int counter = 0;
     int badPixels = 0;
+    int gain = 0;
+    int threshold;
+
+    QTimer *fpsCounter;
+
+    int ipnr;
+    bool geenAntwoord;
 };
 
 #endif // UDPSERVER_H

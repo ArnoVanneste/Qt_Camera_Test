@@ -1,6 +1,6 @@
 QT       += core gui network
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
@@ -9,19 +9,26 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    axistag.cpp \
     checkerboardtest.cpp \
     customlable.cpp \
+    fpschart.cpp \
     main.cpp \
     mainwindow.cpp \
-    udp.cpp
+    udp.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
+    axistag.h \
     checkerboardtest.h \
     customlable.h \
+    fpschart.h \
     mainwindow.h \
-    udp.h
+    udp.h \
+    qcustomplot.h
 
 FORMS += \
+    fpschart.ui \
     mainwindow.ui
 
 INCLUDEPATH += D:\opencv\build\include

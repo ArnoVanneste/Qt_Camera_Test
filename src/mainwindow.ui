@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1500</width>
-    <height>1024</height>
+    <width>1209</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>1280</width>
-      <height>1024</height>
+      <x>10</x>
+      <y>10</y>
+      <width>640</width>
+      <height>512</height>
      </rect>
     </property>
     <property name="text">
@@ -33,7 +33,7 @@
    <widget class="QLabel" name="lable_fps">
     <property name="geometry">
      <rect>
-      <x>1300</x>
+      <x>670</x>
       <y>0</y>
       <width>200</width>
       <height>50</height>
@@ -46,8 +46,8 @@
    <widget class="QLabel" name="lable_hw">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>150</y>
+      <x>670</x>
+      <y>120</y>
       <width>200</width>
       <height>25</height>
      </rect>
@@ -59,8 +59,8 @@
    <widget class="QLabel" name="lable_fw">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>125</y>
+      <x>670</x>
+      <y>100</y>
       <width>200</width>
       <height>25</height>
      </rect>
@@ -72,7 +72,7 @@
    <widget class="QLabel" name="lable_host">
     <property name="geometry">
      <rect>
-      <x>1300</x>
+      <x>670</x>
       <y>50</y>
       <width>200</width>
       <height>25</height>
@@ -85,7 +85,7 @@
    <widget class="QLabel" name="lable_ip">
     <property name="geometry">
      <rect>
-      <x>1300</x>
+      <x>670</x>
       <y>75</y>
       <width>200</width>
       <height>25</height>
@@ -98,8 +98,8 @@
    <widget class="QPushButton" name="find_corners">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>200</y>
+      <x>670</x>
+      <y>175</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -111,8 +111,8 @@
    <widget class="QPushButton" name="show_roi">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>275</y>
+      <x>670</x>
+      <y>240</y>
       <width>170</width>
       <height>50</height>
      </rect>
@@ -121,82 +121,298 @@
      <string>Show Roi</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="increase_roi_width">
+   <widget class="QPushButton" name="switch_mode">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>355</y>
-      <width>80</width>
+      <x>670</x>
+      <y>305</y>
+      <width>170</width>
       <height>50</height>
      </rect>
     </property>
     <property name="text">
-     <string>+</string>
+     <string>Switch Mode</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="decrease_roi_width">
+   <widget class="QPushButton" name="fps_chart">
     <property name="geometry">
      <rect>
-      <x>1390</x>
-      <y>355</y>
-      <width>80</width>
+      <x>670</x>
+      <y>370</y>
+      <width>170</width>
       <height>50</height>
      </rect>
     </property>
     <property name="text">
-     <string>-</string>
+     <string>FPS Chart</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="test">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>560</y>
+      <width>170</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Test</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="line_gain">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>450</y>
+      <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="set_gain">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>450</y>
+      <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Apply</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>435</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set Gain</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="line_threshold">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>510</y>
+      <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>490</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set Threshold</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="set_threshold">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>510</y>
+      <width>80</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Apply</string>
     </property>
    </widget>
    <widget class="QLabel" name="roi_width">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>330</y>
-      <width>200</width>
+      <x>670</x>
+      <y>150</y>
+      <width>100</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>ROI witdth: </string>
+     <string>x: </string>
     </property>
    </widget>
    <widget class="QLabel" name="roi_height">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>415</y>
-      <width>200</width>
+      <x>770</x>
+      <y>150</y>
+      <width>100</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>ROI height: </string>
+     <string>y:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="increase_roi_height">
+   <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>1300</x>
-      <y>440</y>
-      <width>80</width>
-      <height>50</height>
+      <x>880</x>
+      <y>30</y>
+      <width>50</width>
+      <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>+</string>
+     <string>Top Left</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="decrease_roi_height">
+   <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>1390</x>
-      <y>440</y>
-      <width>80</width>
-      <height>50</height>
+      <x>880</x>
+      <y>50</y>
+      <width>20</width>
+      <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>-</string>
+     <string>x: </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>80</y>
+      <width>20</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>y: </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>100</y>
+      <width>71</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Bottom Right</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>120</y>
+      <width>20</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>x: </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>150</y>
+      <width>20</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>y: </string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="topleft_x">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>50</y>
+      <width>91</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="topleft_y">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>80</y>
+      <width>91</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="bottomright_x">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>120</y>
+      <width>91</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="bottomright_y">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>150</y>
+      <width>91</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="set_roi">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>180</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set ROI</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="confirm_roi">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>220</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Confirm</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="reset_roi">
+    <property name="geometry">
+     <rect>
+      <x>880</x>
+      <y>260</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset</string>
     </property>
    </widget>
   </widget>
@@ -205,7 +421,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1500</width>
+     <width>1209</width>
      <height>21</height>
     </rect>
    </property>
