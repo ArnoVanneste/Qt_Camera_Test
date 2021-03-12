@@ -8,10 +8,7 @@ Checkerboardtest::Checkerboardtest()
 
 }
 
-std::vector<cv::Point2f> Checkerboardtest::calc(const QImage& image) {
-
-    std::vector<std::vector<cv::Point3f> > objpoints;
-    std::vector<std::vector<cv::Point2f> > imgpoints;
+const std::vector<cv::Point2f>& Checkerboardtest::calc(const QImage& image) {
 
     std::vector<cv::Point3f> objp;
     for(int i{0}; i<CHECKERBOARD[1]; i++)
@@ -21,8 +18,6 @@ std::vector<cv::Point2f> Checkerboardtest::calc(const QImage& image) {
     }
 
     cv::Mat gray, frame;
-    // vector to store the pixel coordinates of detected checker board corners
-    std::vector<cv::Point2f> corner_pts;
 
     frame = qimage_to_mat(image, CV_8U);
 
@@ -82,4 +77,8 @@ cv::Mat Checkerboardtest::qimage_to_mat(const QImage &img, int format) {
     return cv::Mat(img.height(), img.width(), format,
                        const_cast<uchar*>(img.bits()),
                        img.bytesPerLine()).clone();
+}
+
+const std::vector<cv::Point2f>& Checkerboardtest::getPoints(void) const {
+    return this->corner_pts;
 }

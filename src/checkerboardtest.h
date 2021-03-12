@@ -25,9 +25,11 @@ class Checkerboardtest : public QObject
 public:
     Checkerboardtest();
 
-    std::vector<cv::Point2f> calc(const QImage& img);
+    const std::vector<cv::Point2f>& calc(const QImage& img);
 
     cv::Mat qimage_to_mat(const QImage& img, int format);
+
+    const std::vector<cv::Point2f>& getPoints(void) const;
 
 private:
     int CHECKERBOARD[2];
@@ -36,6 +38,7 @@ private:
     std::vector<std::vector<cv::Point3f> > objpoints;
     std::vector<std::vector<cv::Point2f> > imgpoints;
     std::vector<cv::Point3f> objp;
+    std::vector<cv::Point2f> corner_pts;
 
 };
 

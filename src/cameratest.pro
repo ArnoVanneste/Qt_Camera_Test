@@ -10,6 +10,9 @@ CONFIG += c++11
 
 SOURCES += \
     axistag.cpp \
+    cablibrate.cpp \
+    calibrationgridparameters.cpp \
+    characteristics.cpp \
     checkerboardtest.cpp \
     customlable.cpp \
     fpschart.cpp \
@@ -20,6 +23,9 @@ SOURCES += \
 
 HEADERS += \
     axistag.h \
+    cablibrate.h \
+    calibrationgridparameters.h \
+    characteristics.h \
     checkerboardtest.h \
     customlable.h \
     fpschart.h \

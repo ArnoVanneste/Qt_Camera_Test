@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->fpsChart = new FpsChart();
 
+    ui->logo->setStyleSheet("background-color: rgba(0,0,0,0%)");
+
 }
 
 MainWindow::~MainWindow()
@@ -82,7 +84,6 @@ void MainWindow::hasToRender()
         image.setDotsPerMeterY(10000);
         QPixmap pix = QPixmap::fromImage(image);
         QPixmap scaled = pix.scaled(640,512, Qt::KeepAspectRatio);
-        ui->label_img->setStyleSheet("background-color : white");
         ui->label_img->setPixmap(scaled);
         server->mutex.unlock();
 
@@ -122,8 +123,6 @@ void MainWindow::on_show_roi_clicked(bool checked)
 {
     if (checked) {
         ui->label_img->showRoi = true;
-        ui->roi_width->setText("x: " + QString::number(ui->label_img->getWidth()));
-        ui->roi_height->setText("y: " + QString::number(ui->label_img->getHeight()));
     } else {
         ui->label_img->showRoi = false;
     }
