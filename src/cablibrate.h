@@ -2,12 +2,17 @@
 #define CABLIBRATE_H
 
 #include "opencv2/core/core.hpp"
+#include <opencv2/calib3d.hpp>
 #include <iostream>
 #include <stdio.h>
 #include <QPoint>
+#include <cmath>
+#include <QPair>
 
 #include "characteristics.h"
 #include "calibrationgridparameters.h"
+#include "cameracalibrationimageprocessor.h"
+#include "lmsolver.h"
 
 
 class Cablibrate
@@ -19,7 +24,7 @@ public:
     void Reset(void);
 
 public:
-    Characteristics Characteristics;
+    Characteristics characteristics;
     CalibrationGridParameters CalGrid;
 
     bool GridCalculated = false;
@@ -29,9 +34,16 @@ public:
     bool Corner3Found = false;
     bool Corner4Found = false;
 
+    static void evaluate(const double* par, int m_dat, const void *data, double *fvec, int *userbreak);
+
+    static QPoint* _calibrationPixelData;
+    static QPoint* _calibrationSpaceData;
+
+    static int numSamples;
+
+
 private:
-    QPoint* _calibrationPixelData;
-    QPoint* _calibrationSpaceData;
+
 
 
 

@@ -58,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->fpsChart = new FpsChart();
 
+    QPixmap logo("D:\\repos\\Qt_Camera_Test\\src\\img\\marelec_30.png");
+    ui->logo->setPixmap(logo);
     ui->logo->setStyleSheet("background-color: rgba(0,0,0,0%)");
 
 }
