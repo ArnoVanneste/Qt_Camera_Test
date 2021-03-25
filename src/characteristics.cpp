@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <iostream>
 
-static Characteristics* FirstEstimation(std::vector<cv::Point2f> pixelCoordinates, std::vector<cv::Point2f> spaceCoordinates, int width, int height) {
+Characteristics Characteristics::FirstEstimation(std::vector<cv::Point2f> pixelCoordinates, std::vector<cv::Point2f> spaceCoordinates, int width, int height) {
 
 
     double X1 = spaceCoordinates[0].x;
@@ -24,27 +24,18 @@ static Characteristics* FirstEstimation(std::vector<cv::Point2f> pixelCoordinate
     double U4 = pixelCoordinates[3].x;
     double V4 = pixelCoordinates[3].y;
 
-    Characteristics *c = new Characteristics
-    (
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0.5 * width,
-        0.5 * height,
-        0.0,
-        0.0
-    );
+    Characteristics c;
+    c.U0 = 0.5 * width;
+    c.V0 = 0.5 * height;
+    c.K1 = 0.0;
+    c.K2 = 0.0;
+
     // with K1 == K2 == 0: U=u and V=v
     // u = (Ax+By+C) / (Gx+Hy+I) => Ax + By + C - Gux - Huy - Iu = 0
     // v = (Dx+Ey+F) / (Gx+Hy+I) => Dx + Ey + F - Gvx - Hvy - Iv = 0
     // Solve for A,B,C,D,E,F,G,H,I in the case of ((U1,V1),(X1,Y1)), ..., ((U4,V4),(X4,Y4))
     // infinite number of solutions possible => without losing generality we can set I = 1.0
-    c->I = 1.0;
+    c.I = 1.0;
     // => we end up with 8 linear equations with 8 unknowns
     std::vector<std::vector<double> > a = std::vector<std::vector<double> >(8);
     a[0] = std::vector<double> { X1, Y1, 1.0, 0.0, 0.0, 0.0, -U1 * X1, -U1 * Y1 };
@@ -58,14 +49,14 @@ static Characteristics* FirstEstimation(std::vector<cv::Point2f> pixelCoordinate
     std::vector<double> b { U1, V1, U2, V2, U3, V3, U4, V4 };
 //    Solve(a, b);
 
-    c->A = b[0];
-    c->B = b[1];
-    c->C = b[2];
-    c->D = b[3];
-    c->E = b[4];
-    c->F = b[5];
-    c->G = b[6];
-    c->H = b[7];
+    c.A = b[0];
+    c.B = b[1];
+    c.C = b[2];
+    c.D = b[3];
+    c.E = b[4];
+    c.F = b[5];
+    c.G = b[6];
+    c.H = b[7];
 
     return c;
 

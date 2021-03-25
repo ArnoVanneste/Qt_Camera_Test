@@ -12,12 +12,15 @@ SOURCES += \
     axistag.cpp \
     cablibrate.cpp \
     calibrationgridparameters.cpp \
+    cameracalibrationimageprocessor.cpp \
     characteristics.cpp \
     checkerboardtest.cpp \
     customlable.cpp \
     fpschart.cpp \
+    lmsolver.cpp \
     main.cpp \
     mainwindow.cpp \
+    optimizationresult.cpp \
     udp.cpp \
     qcustomplot.cpp
 
@@ -25,11 +28,15 @@ HEADERS += \
     axistag.h \
     cablibrate.h \
     calibrationgridparameters.h \
+    cameracalibrationimageprocessor.h \
     characteristics.h \
     checkerboardtest.h \
     customlable.h \
     fpschart.h \
+    lmsolver.h \
     mainwindow.h \
+    optimizationresult.h \
+    solverstatus.h \
     udp.h \
     qcustomplot.h
 
@@ -37,7 +44,8 @@ FORMS += \
     fpschart.ui \
     mainwindow.ui
 
-INCLUDEPATH += D:\opencv\build\include
+INCLUDEPATH += D:\Software\OpenCV\opencv\build\include
+INCLUDEPATH += D:\repos\Qt_Camera_Test\include
 
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_core451.dll
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_highgui451.dll
@@ -45,6 +53,7 @@ LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_imgcodecs451.dll
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_imgproc451.dll
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_features2d451.dll
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_calib3d451.dll
+#LIBS += D:\Vives\Stage\lmfit\lmfit32.dll
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
