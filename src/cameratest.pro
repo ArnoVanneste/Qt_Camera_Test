@@ -25,6 +25,7 @@ SOURCES += \
     qcustomplot.cpp
 
 HEADERS += \
+    SolverStatus.h \
     axistag.h \
     cablibrate.h \
     calibrationgridparameters.h \

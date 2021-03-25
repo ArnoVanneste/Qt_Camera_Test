@@ -134,3 +134,30 @@ void Cablibrate::evaluate(const double* par, int m_dat, const void *data, double
         fvec[teller] = sqrt(pow((diff.first.x() - diff.second.x()), 2) + pow((diff.first.y() - diff.second.y()), 2));
     }
 }
+
+void Cablibrate::evaluate(const double* par, int m_dat, const void *data, double *fvec, int *userbreak) {
+    Characteristics loopCharacteristics
+    {
+        par[0],
+        par[1],
+        par[2],
+        par[3],
+        par[4],
+        par[5],
+        par[6],
+        par[7],
+        par[8],
+        par[9],
+        par[10],
+        par[11]
+    };
+    for (int teller = 0; teller < Cablibrate::numSamples; teller++)
+    {
+        QPoint calcPixel = loopCharacteristics.ToPixelCoordinates(Cablibrate::_calibrationSpaceData[teller]);
+        QPair<QPoint, QPoint> diff;
+        diff.first = calcPixel;
+        diff.second = Cablibrate::_calibrationPixelData[teller];
+        fvec[teller] = sqrt(pow((diff.first.x() - diff.second.x()), 2) + pow((diff.first.y() - diff.second.y()), 2));
+    }
+}
+

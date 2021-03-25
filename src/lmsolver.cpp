@@ -93,3 +93,4 @@ OptimizationResult LMSolver::Solve(void (*f)(const double* par, int m_dat, const
 
     return OptimizationResult(std::vector<double>(), 0, 0, LMCPP::SolverStatus::ConvergedBoth, "", true);
 }
+
