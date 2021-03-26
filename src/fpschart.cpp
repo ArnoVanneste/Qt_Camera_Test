@@ -33,9 +33,9 @@ FpsChart::~FpsChart()
 
 void FpsChart::realtimeDataSlot()
 {
-    static QTime time(QTime::currentTime());
-    ui->mPlot->graph(0)->addData(time.elapsed()/1000, this->fps);
-    ui->mPlot->xAxis->setRange(time.elapsed()/1000, 100, Qt::AlignCenter);
+    static QElapsedTimer timer;
+    ui->mPlot->graph(0)->addData(timer.elapsed()/1000, this->fps);
+    ui->mPlot->xAxis->setRange(timer.elapsed()/1000, 100, Qt::AlignCenter);
     ui->mPlot->replot();
 }
 

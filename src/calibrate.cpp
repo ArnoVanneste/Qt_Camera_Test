@@ -1,10 +1,10 @@
-#include "cablibrate.h"
+#include "calibrate.h"
 
-QPoint* Cablibrate::_calibrationPixelData;
-QPoint* Cablibrate::_calibrationSpaceData;
-int Cablibrate::numSamples;
+QPoint* Calibrate::_calibrationPixelData;
+QPoint* Calibrate::_calibrationSpaceData;
+int Calibrate::numSamples;
 
-void Cablibrate::Reset(void)
+void Calibrate::Reset(void)
 {
     GridCalculated = false;
     Corner1Found = false;
@@ -13,26 +13,21 @@ void Cablibrate::Reset(void)
     Corner4Found = false;
 }
 
-bool Cablibrate::Calibrate(char* cameraImage, int width, int height, std::vector<cv::Point2f> cornerpoints, int searchRadius)
+std::vector<cv::Point2f> Calibrate::FindCorners (std::vector<cv::Point2f> points) {
+    std::vector<cv::Point2f> result;
+    result.push_back(points[0]);
+    result.push_back(points[CalGrid.NumColumns - 1]);
+    result.push_back(points[CalGrid.NumColumns * (CalGrid.NumRows - 1)]);
+    result.push_back(points[(CalGrid.NumColumns * CalGrid.NumRows) - 1]);
+
+    return result;
+}
+
+bool Calibrate::Calibration(char* cameraImage, int width, int height, std::vector<cv::Point2f> cornerpoints, int searchRadius)
 {
     Reset();
 
-    // approximate location of the corners, as indicated by the user
-    int u1 = cornerpoints[0].x;
-    int v1 = cornerpoints[0].y;
-    int u2 = cornerpoints[1].x;
-    int v2 = cornerpoints[1].y;
-    int u3 = cornerpoints[2].x;
-    int v3 = cornerpoints[2].y;
-    int u4 = cornerpoints[3].x;
-    int v4 = cornerpoints[3].y;
-
-    std::vector<cv::Point2f> pixelCoords = {
-        cv::Point2f(u1, v1),
-        cv::Point2f(u2, v2),
-        cv::Point2f(u3, v3),
-        cv::Point2f(u4, v4)
-    };
+    std::vector<cv::Point2f> pixelCoords = FindCorners(cornerpoints);
 
     double targetLeftPosition = -0.5 * CalGrid.NumColumns * CalGrid.GridSize;
     double targetRightPosition = 0.5 * CalGrid.NumColumns * CalGrid.GridSize;
@@ -48,10 +43,10 @@ bool Cablibrate::Calibrate(char* cameraImage, int width, int height, std::vector
 
     Characteristics estimated = Characteristics::FirstEstimation(pixelCoords, spaceCoords, width, height);
 
-    Cablibrate::_calibrationSpaceData = new QPoint[(CalGrid.NumRows + 1) * (CalGrid.NumColumns + 1)];
-    Cablibrate::_calibrationPixelData = new QPoint[sizeof(_calibrationSpaceData)];
+    Calibrate::_calibrationSpaceData = new QPoint[(CalGrid.NumRows + 1) * (CalGrid.NumColumns + 1)];
+    Calibrate::_calibrationPixelData = new QPoint[sizeof(_calibrationSpaceData)];
 
-    Cablibrate::numSamples = 0;
+    Calibrate::numSamples = 0;
     for (int row = 0; row <= CalGrid.NumRows; ++row)
     {
         double y = (row + 1) * CalGrid.GridSize;
@@ -64,9 +59,9 @@ bool Cablibrate::Calibrate(char* cameraImage, int width, int height, std::vector
             int v = estPixel.y();
             CameraCalibrationImageProcessor::FindCorner(cameraImage, width, height, &u, &v, searchRadius);
             QPoint foundPixel(u, v);
-            Cablibrate::_calibrationSpaceData[numSamples] = space;
-            Cablibrate::_calibrationPixelData[numSamples] = foundPixel;
-            Cablibrate::numSamples++;
+            Calibrate::_calibrationSpaceData[numSamples] = space;
+            Calibrate::_calibrationPixelData[numSamples] = foundPixel;
+            Calibrate::numSamples++;
         }
     }
 
@@ -86,22 +81,24 @@ bool Cablibrate::Calibrate(char* cameraImage, int width, int height, std::vector
 
     LMSolver solver(1E-20, 1E-20, 1E-20);
 
-    OptimizationResult t = solver.Solve(evaluate, parameters, Cablibrate::numSamples);
-    Characteristics Characteristics
+    OptimizationResult* t = solver.Solve(evaluate, parameters, Calibrate::numSamples);
+    this->characteristics =
     {
-        t.OptimizedParameters[0],
-        t.OptimizedParameters[1],
-        t.OptimizedParameters[2],
-        t.OptimizedParameters[3],
-        t.OptimizedParameters[4],
-        t.OptimizedParameters[5],
-        t.OptimizedParameters[6],
-        t.OptimizedParameters[7],
-        t.OptimizedParameters[8],
-        t.OptimizedParameters[9],
-        t.OptimizedParameters[10],
-        t.OptimizedParameters[11]
+        t->OptimizedParameters[0],
+        t->OptimizedParameters[1],
+        t->OptimizedParameters[2],
+        t->OptimizedParameters[3],
+        t->OptimizedParameters[4],
+        t->OptimizedParameters[5],
+        t->OptimizedParameters[6],
+        t->OptimizedParameters[7],
+        t->OptimizedParameters[8],
+        t->OptimizedParameters[9],
+        t->OptimizedParameters[10],
+        t->OptimizedParameters[11]
     };
+
+    delete t;
 
     GridCalculated = true;
 
@@ -109,7 +106,7 @@ bool Cablibrate::Calibrate(char* cameraImage, int width, int height, std::vector
 
 }
 
-void Cablibrate::evaluate(const double* par, int m_dat, const void *data, double *fvec, int *userbreak) {
+void Calibrate::evaluate(const double* par, int m_dat, const void *data, double *fvec, int *userbreak) {
     Characteristics loopCharacteristics
     {
         par[0],
@@ -125,39 +122,16 @@ void Cablibrate::evaluate(const double* par, int m_dat, const void *data, double
         par[10],
         par[11]
     };
-    for (int teller = 0; teller < Cablibrate::numSamples; teller++)
+    for (int teller = 0; teller < Calibrate::numSamples; teller++)
     {
-        QPoint calcPixel = loopCharacteristics.ToPixelCoordinates(Cablibrate::_calibrationSpaceData[teller]);
+        QPoint calcPixel = loopCharacteristics.ToPixelCoordinates(Calibrate::_calibrationSpaceData[teller]);
         QPair<QPoint, QPoint> diff;
         diff.first = calcPixel;
-        diff.second = Cablibrate::_calibrationPixelData[teller];
+        diff.second = Calibrate::_calibrationPixelData[teller];
         fvec[teller] = sqrt(pow((diff.first.x() - diff.second.x()), 2) + pow((diff.first.y() - diff.second.y()), 2));
     }
 }
 
-void Cablibrate::evaluate(const double* par, int m_dat, const void *data, double *fvec, int *userbreak) {
-    Characteristics loopCharacteristics
-    {
-        par[0],
-        par[1],
-        par[2],
-        par[3],
-        par[4],
-        par[5],
-        par[6],
-        par[7],
-        par[8],
-        par[9],
-        par[10],
-        par[11]
-    };
-    for (int teller = 0; teller < Cablibrate::numSamples; teller++)
-    {
-        QPoint calcPixel = loopCharacteristics.ToPixelCoordinates(Cablibrate::_calibrationSpaceData[teller]);
-        QPair<QPoint, QPoint> diff;
-        diff.first = calcPixel;
-        diff.second = Cablibrate::_calibrationPixelData[teller];
-        fvec[teller] = sqrt(pow((diff.first.x() - diff.second.x()), 2) + pow((diff.first.y() - diff.second.y()), 2));
-    }
+Characteristics Calibrate::getParams(void) const {
+    return this->characteristics;
 }
-

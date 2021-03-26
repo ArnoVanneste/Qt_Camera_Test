@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->logo->setPixmap(logo);
     ui->logo->setStyleSheet("background-color: rgba(0,0,0,0%)");
 
+    Calibrator = new Calibrate();
+
 }
 
 MainWindow::~MainWindow()
@@ -231,4 +233,29 @@ void MainWindow::on_confirm_roi_clicked()
                    );
 
     ui->label_img->update();
+}
+
+void MainWindow::on_calibrate_clicked()
+{
+    if(!getImage().isNull()) {
+        char * buff = (char *)server->getBuffer();
+        bool test = Calibrator->Calibration(buff, 1280, 1024, boardtest->calc(getImage()), 1000);
+
+        Characteristics optChars = Calibrator->getParams();
+        ui->params_a->setText("A = " + QString::number(optChars.A));
+        ui->params_b->setText("B = " + QString::number(optChars.B));
+        ui->params_c->setText("C = " + QString::number(optChars.C));
+        ui->params_d->setText("D = " + QString::number(optChars.D));
+        ui->params_e->setText("E = " + QString::number(optChars.E));
+        ui->params_f->setText("F = " + QString::number(optChars.F));
+        ui->params_g->setText("G = " + QString::number(optChars.G));
+        ui->params_h->setText("H = " + QString::number(optChars.H));
+        ui->params_i->setText("I = " + QString::number(optChars.I));
+        ui->params_U0->setText("U0 = " + QString::number(optChars.U0));
+        ui->params_V0->setText("V0 = " + QString::number(optChars.V0));
+        ui->params_K1->setText("K1 = " + QString::number(optChars.K1));
+        ui->params_K2->setText("K2 = " + QString::number(optChars.K2));
+
+        qDebug() << test;
+    }
 }

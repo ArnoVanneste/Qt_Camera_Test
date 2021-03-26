@@ -47,7 +47,7 @@ Characteristics Characteristics::FirstEstimation(std::vector<cv::Point2f> pixelC
     a[6] = std::vector<double> { X4, Y3, 1.0, 0.0, 0.0, 0.0, -U4 * X4, -U4 * Y4 };
     a[7] = std::vector<double> { 0.0, 0.0, 0.0, X4, Y4, 1.0, -V4 * X4, -V4 * Y4 };
     std::vector<double> b { U1, V1, U2, V2, U3, V3, U4, V4 };
-    Solve(a, b);
+//    Solve(a, b);
 
     c.A = b[0];
     c.B = b[1];
@@ -59,6 +59,7 @@ Characteristics Characteristics::FirstEstimation(std::vector<cv::Point2f> pixelC
     c.H = b[7];
 
     return c;
+
 }
 
 QPoint Characteristics::ToPixelCoordinates(QPoint spaceCoordinates)

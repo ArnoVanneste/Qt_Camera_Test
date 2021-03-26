@@ -1,7 +1,5 @@
 #include "lmsolver.h"
 
-double * LMSolver::optParams = nullptr;
-
 LMSolver::LMSolver(double ftol,
                 double xtol,
                 double gtol,
@@ -21,12 +19,6 @@ LMSolver::LMSolver(double ftol,
     this->ScaleDiagonal = scaleDiagonal;
     this->VerboseOutput = verbose;
     this->OptimizerBackend = optimizerBackend;
-    this->lmmin = (void (*)(int n_par, double *par, int m_dat, const void *data,
-                      void (*evaluate) (const double *par, int m_dat, const void *data,
-                                         double *fvec, int *userbreak),
-                       const lm_control_struct *control, lm_status_struct *status,
-                       double_array_allocator_t alloc_dp_array,
-                       deallocator_t dealloc))QLibrary::resolve("lmmin32.dll", "lmmin");
 }
 
 LMSolver::~LMSolver()
@@ -34,16 +26,7 @@ LMSolver::~LMSolver()
 
 }
 
-__stdcall double* LMSolver::Allocate(int count) {
-    LMSolver::optParams =(double *)malloc(count*sizeof(double));
-    return LMSolver::optParams;
-}
-
-__stdcall void LMSolver::DeAllocate(void *params) {
-    free((double *)params);
-}
-
-OptimizationResult LMSolver::Solve(void (*f)(const double* par, int m_dat, const void *data, double *fvec, int *userbreak), double* parameters, int mData) {
+OptimizationResult* LMSolver::Solve(void (*f)(const double* par, int m_dat, const void *data, double *fvec, int *userbreak), double* parameters, int mData) {
     lm_control_struct ctrl = {
         .ftol = this->Ftol,
         .xtol = this->Xtol,
@@ -60,37 +43,30 @@ OptimizationResult LMSolver::Solve(void (*f)(const double* par, int m_dat, const
 
     lm_status_struct stat;
 
-    OptimizationResult* result = NULL;
+    OptimizationResult* result;
 
-    Allocate(sizeof(parameters));
+    this->optParams = (double *)malloc(sizeof(parameters)*sizeof(double));
     for(int i = 0; i < (int)sizeof (parameters) - 1; i++) {
         if(parameters[i]) {
-            LMSolver::optParams[i] = parameters[i];
+            this->optParams[i] = parameters[i];
         }
     }
 
     // call native lmmin from lmfit package (modifies optimizedPars)
-    this->lmmin(
-        sizeof(LMSolver::optParams),
-        LMSolver::optParams,
+    lmmin(
+        sizeof(this->optParams),
+        this->optParams,
         mData,
         NULL,
         f,
         &ctrl,
         &stat,
-        LMSolver::Allocate,
-        LMSolver::DeAllocate);
+        malloc_array_allocator,
+        free_deallocator);
 
     // extract results from lmmin's result data struct
-//    result = new OptimizationResult(
-//        optParams,
-//        stat.fnorm,
-//        stat.nfev,
-//        (SolverStatus)stat.outcome,
-//        LMSolver.outcomeMessages[stat.outcome],
-//        stat.userbreak > 0 ? true : false
-//    );
+    result = new OptimizationResult(this->optParams, stat.fnorm, stat.nfev, (LMCPP::SolverStatus)stat.outcome, "Outcome message", stat.userbreak > 0 ? true : false);
 
-    return OptimizationResult(std::vector<double>(), 0, 0, LMCPP::SolverStatus::ConvergedBoth, "", true);
+    return result;
 }
 

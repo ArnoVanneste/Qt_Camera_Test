@@ -10,7 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     axistag.cpp \
-    cablibrate.cpp \
+    calibrate.cpp \
     calibrationgridparameters.cpp \
     cameracalibrationimageprocessor.cpp \
     characteristics.cpp \
@@ -22,12 +22,12 @@ SOURCES += \
     mainwindow.cpp \
     optimizationresult.cpp \
     udp.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    lmmin.cpp
 
 HEADERS += \
-    SolverStatus.h \
     axistag.h \
-    cablibrate.h \
+    calibrate.h \
     calibrationgridparameters.h \
     cameracalibrationimageprocessor.h \
     characteristics.h \
@@ -39,7 +39,9 @@ HEADERS += \
     optimizationresult.h \
     solverstatus.h \
     udp.h \
-    qcustomplot.h
+    qcustomplot.h \
+    lmmin.h \
+    lmstruct.h
 
 FORMS += \
     fpschart.ui \

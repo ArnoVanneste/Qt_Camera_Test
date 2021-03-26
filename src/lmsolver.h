@@ -45,18 +45,9 @@ public:
     bool VerboseOutput;
     LMBackend OptimizerBackend;
 
-    OptimizationResult Solve(void (*f)(const double* par, int m_dat, const void *data, double *fvec, int *userbreak), double* parameters, int mData);
+    OptimizationResult* Solve(void (*f)(const double* par, int m_dat, const void *data, double *fvec, int *userbreak), double* parameters, int mData);
     //from lmmin.h
-    static __stdcall double* Allocate(int count);
-    static __stdcall void DeAllocate(void* params);
-    static double *optParams;
-
-    void (*lmmin)(int n_par, double *par, int m_dat, const void *data,
-               void (*evaluate) (const double *par, int m_dat, const void *data,
-                                  double *fvec, int *userbreak),
-                const lm_control_struct *control, lm_status_struct *status,
-                double_array_allocator_t alloc_dp_array,
-                deallocator_t dealloc);
+    double *optParams;
 
 private:
 

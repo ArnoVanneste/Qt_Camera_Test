@@ -7,6 +7,7 @@
 #include <QPainter>
 
 #include "customlable.h"
+#include "calibrate.h"
 #include "udp.h"
 #include "checkerboardtest.h"
 #include "fpschart.h"
@@ -41,6 +42,7 @@ private:
     QImage image;
     ECameraModes curCamMode;
     FpsChart *fpsChart;
+    Calibrate *Calibrator;
 
     bool geenAntwoord;
 
@@ -59,5 +61,6 @@ private slots:
     void on_set_roi_clicked();
     void on_reset_roi_clicked();
     void on_confirm_roi_clicked();
+    void on_calibrate_clicked();
 };
 #endif // MAINWINDOW_H

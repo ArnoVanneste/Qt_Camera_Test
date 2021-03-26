@@ -11,10 +11,10 @@
 class OptimizationResult
 {
 public:
-    OptimizationResult(std::vector<double> optimizedParameters, double errorNorm, int iterations, LMCPP::SolverStatus outcome, std::string message, bool terminatedByUser);
-
+    OptimizationResult(double* optimizedParameters, double errorNorm, int iterations, LMCPP::SolverStatus outcome, std::string message, bool terminatedByUser);
+    ~OptimizationResult();
 public:
-    std::vector<double> OptimizedParameters;
+    double* OptimizedParameters;
     double ErrorNorm;
     int Iterations;
     LMCPP::SolverStatus Outcome;

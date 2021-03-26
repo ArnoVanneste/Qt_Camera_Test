@@ -1,5 +1,5 @@
-#ifndef CABLIBRATE_H
-#define CABLIBRATE_H
+#ifndef CALIBRATE_H
+#define CALIBRATE_H
 
 #include "opencv2/core/core.hpp"
 #include <opencv2/calib3d.hpp>
@@ -15,15 +15,17 @@
 #include "lmsolver.h"
 
 
-class Cablibrate
+class Calibrate
 {
 public:
-    bool Calibrate(char* cameraImage, int width, int height, std::vector<cv::Point2f> cornerpoints, int searchRadius);
+    bool Calibration(char* cameraImage, int width, int height, std::vector<cv::Point2f> cornerpoints, int searchRadius);
     void Reset(void);
 
 public:
     Characteristics characteristics;
     CalibrationGridParameters CalGrid;
+
+    std::vector<cv::Point2f> FindCorners (std::vector<cv::Point2f> points);
 
     bool GridCalculated = false;
 
@@ -39,12 +41,8 @@ public:
 
     static int numSamples;
 
-
-private:
-
-
-
+    Characteristics getParams(void) const;
 
 };
 
-#endif // CABLIBRATE_H
+#endif // CALIBRATE_H
