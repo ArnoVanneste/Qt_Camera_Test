@@ -9,38 +9,37 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    axistag.cpp \
-    calibrate.cpp \
-    calibrationgridparameters.cpp \
-    cameracalibrationimageprocessor.cpp \
+    lmmin.cpp \
+    calibration.cpp \
     characteristics.cpp \
+    lmsolver.cpp \
+    optimizationresult.cpp \
+    axistag.cpp \
     checkerboardtest.cpp \
     customlable.cpp \
     fpschart.cpp \
-    lmsolver.cpp \
     main.cpp \
     mainwindow.cpp \
-    optimizationresult.cpp \
     udp.cpp \
-    qcustomplot.cpp \
-    lmmin.cpp
+    qcustomplot.cpp
 
 HEADERS += \
-    axistag.h \
-    calibrate.h \
-    calibrationgridparameters.h \
-    cameracalibrationimageprocessor.h \
+    lmmin.h \
+    calibration.h \
     characteristics.h \
+    globals.h \
+    helpers.h \
+    lmenum.h \
+    lmsolver.h \
+    optimizationresult.h \
+    axistag.h \
     checkerboardtest.h \
     customlable.h \
     fpschart.h \
-    lmsolver.h \
     mainwindow.h \
-    optimizationresult.h \
     solverstatus.h \
     udp.h \
     qcustomplot.h \
-    lmmin.h \
     lmstruct.h
 
 FORMS += \

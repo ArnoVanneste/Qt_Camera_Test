@@ -6,6 +6,7 @@
 #include <QPixmap>
 #include <QThread>
 #include <iostream>
+#include <calibration.h>
 
 #include <chrono>
 
@@ -62,8 +63,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->logo->setPixmap(logo);
     ui->logo->setStyleSheet("background-color: rgba(0,0,0,0%)");
 
-    Calibrator = new Calibrate();
-
 }
 
 MainWindow::~MainWindow()
@@ -101,9 +100,8 @@ void MainWindow::renderPoints(const std::vector<cv::Point2f>& points) const {
 
 }
 
-const QImage & MainWindow::getImage(){
-
-    return image;
+QImage MainWindow::getImage(void) const {
+    return this->image;
 
 }
 
@@ -237,25 +235,46 @@ void MainWindow::on_confirm_roi_clicked()
 
 void MainWindow::on_calibrate_clicked()
 {
-    if(!getImage().isNull()) {
-        char * buff = (char *)server->getBuffer();
-        bool test = Calibrator->Calibration(buff, 1280, 1024, boardtest->calc(getImage()), 1000);
+    Calibration c;
+    const std::vector<cv::Point2f>& points = boardtest->calc(getImage());
+//    char * camera_image = (char *)malloc(sizeof(char)*1024*1280);
+//    this->server->getBufferCoppy(camera_image);
+    bool succes = c.Calibrate((char *)server->getBuffer(), 1280, 1024, {{points[65].x, points[65].y}, {points[5].x, points[5].y}, {points[60].x, points[60].y}, {points[0].x, points[0].y}}, 10);
+    if (succes) {
+        Characteristics oc = c.m_optimized_characteristics;
 
-        Characteristics optChars = Calibrator->getParams();
-        ui->params_a->setText("A = " + QString::number(optChars.A));
-        ui->params_b->setText("B = " + QString::number(optChars.B));
-        ui->params_c->setText("C = " + QString::number(optChars.C));
-        ui->params_d->setText("D = " + QString::number(optChars.D));
-        ui->params_e->setText("E = " + QString::number(optChars.E));
-        ui->params_f->setText("F = " + QString::number(optChars.F));
-        ui->params_g->setText("G = " + QString::number(optChars.G));
-        ui->params_h->setText("H = " + QString::number(optChars.H));
-        ui->params_i->setText("I = " + QString::number(optChars.I));
-        ui->params_U0->setText("U0 = " + QString::number(optChars.U0));
-        ui->params_V0->setText("V0 = " + QString::number(optChars.V0));
-        ui->params_K1->setText("K1 = " + QString::number(optChars.K1));
-        ui->params_K2->setText("K2 = " + QString::number(optChars.K2));
-
-        qDebug() << test;
+        ui->params_a->setText("A = " + QString::number(oc.m_A));
+        ui->params_b->setText("B = " + QString::number(oc.m_B));
+        ui->params_c->setText("C = " + QString::number(oc.m_C));
+        ui->params_d->setText("D = " + QString::number(oc.m_D));
+        ui->params_e->setText("E = " + QString::number(oc.m_E));
+        ui->params_f->setText("F = " + QString::number(oc.m_F));
+        ui->params_g->setText("G = " + QString::number(oc.m_G));
+        ui->params_h->setText("H = " + QString::number(oc.m_H));
+        ui->params_i->setText("I = " + QString::number(oc.m_I));
+        ui->params_U0->setText("U0 = " + QString::number(oc.m_U0));
+        ui->params_V0->setText("V0 = " + QString::number(oc.m_V0));
+        ui->params_K1->setText("K1 = " + QString::number(oc.m_K1));
+        ui->params_K2->setText("K2 = " + QString::number(oc.m_K2));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

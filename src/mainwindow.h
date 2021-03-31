@@ -7,7 +7,6 @@
 #include <QPainter>
 
 #include "customlable.h"
-#include "calibrate.h"
 #include "udp.h"
 #include "checkerboardtest.h"
 #include "fpschart.h"
@@ -27,7 +26,7 @@ public:
     ~MainWindow();
 
 public:
-    const QImage & getImage();
+    QImage getImage(void) const;
 
     enum ECameraModes {PICTURE_MODE, LASERMODE};
     void setmode (ECameraModes mode);
@@ -42,7 +41,6 @@ private:
     QImage image;
     ECameraModes curCamMode;
     FpsChart *fpsChart;
-    Calibrate *Calibrator;
 
     bool geenAntwoord;
 
@@ -62,5 +60,6 @@ private slots:
     void on_reset_roi_clicked();
     void on_confirm_roi_clicked();
     void on_calibrate_clicked();
+    void on_cal_clicked();
 };
 #endif // MAINWINDOW_H
