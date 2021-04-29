@@ -80,6 +80,8 @@ void Udp::readyRead()
 
     i=socket->readDatagram(((char *)s), socket->pendingDatagramSize(), &sender, &senderPort);
 
+    timeStamp();
+
     if (i==4) {
         if ((s[0]&0xFF00)==0xFF00) {
             progok=true;
@@ -319,5 +321,11 @@ void Udp::setBottomrightY (int bottomright_y) {
 }
 int Udp::getBottomrightY (void) {
     return bottomright_y;
+}
+
+void Udp::timeStamp(void) {
+
+    Udp::currentTime = time.time().toString("hh:mm:ss.zzz");
+
 }
     

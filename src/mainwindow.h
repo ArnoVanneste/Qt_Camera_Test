@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <vector>
 #include <QMainWindow>
 #include <QNetworkDatagram>
 #include <QTimer>
@@ -42,6 +43,8 @@ private:
     ECameraModes curCamMode;
     FpsChart *fpsChart;
 
+    std::vector<QString> timeStamps;
+
     bool geenAntwoord;
 
     void renderPoints(const std::vector<cv::Point2f>& points) const;
@@ -60,6 +63,5 @@ private slots:
     void on_reset_roi_clicked();
     void on_confirm_roi_clicked();
     void on_calibrate_clicked();
-    void on_cal_clicked();
 };
 #endif // MAINWINDOW_H

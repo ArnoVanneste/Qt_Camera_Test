@@ -1,6 +1,8 @@
 #ifndef UDPSERVER_H
 #define UDPSERVER_H
 
+#include <QTime>
+#include <QDateTime>
 #include <QObject>
 #include <QUdpSocket>
 #include <QNetworkDatagram>
@@ -44,6 +46,7 @@ public:
     void setGain(int gain);
     int getGain(void);
     void setThreshold(int threshold);
+    void timeStamp(void);
 
 public:
     int topleft_x = 0;
@@ -92,10 +95,14 @@ private:
     int gain = 0;
     int threshold;
 
+    QDateTime time;
+
     QTimer *fpsCounter;
 
     int ipnr;
     bool geenAntwoord;
+
+    QString currentTime;
 };
 
 #endif // UDPSERVER_H

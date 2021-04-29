@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    connection.cpp \
     lmmin.cpp \
     calibration.cpp \
     characteristics.cpp \
@@ -20,10 +21,12 @@ SOURCES += \
     fpschart.cpp \
     main.cpp \
     mainwindow.cpp \
+    paramtransfer.cpp \
     udp.cpp \
     qcustomplot.cpp
 
 HEADERS += \
+    connection.h \
     lmmin.h \
     calibration.h \
     characteristics.h \
@@ -37,6 +40,7 @@ HEADERS += \
     customlable.h \
     fpschart.h \
     mainwindow.h \
+    paramtransfer.h \
     solverstatus.h \
     udp.h \
     qcustomplot.h \
