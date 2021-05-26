@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     connection.cpp \
+    deltachart.cpp \
     lmmin.cpp \
     calibration.cpp \
     characteristics.cpp \
@@ -22,11 +23,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     paramtransfer.cpp \
+    tcpip.cpp \
     udp.cpp \
     qcustomplot.cpp
 
 HEADERS += \
+    StdAfx.h \
     connection.h \
+    deltachart.h \
     lmmin.h \
     calibration.h \
     characteristics.h \
@@ -41,12 +45,15 @@ HEADERS += \
     fpschart.h \
     mainwindow.h \
     paramtransfer.h \
+    resource.h \
     solverstatus.h \
+    tcpip.h \
     udp.h \
     qcustomplot.h \
     lmstruct.h
 
 FORMS += \
+    deltachart.ui \
     fpschart.ui \
     mainwindow.ui
 

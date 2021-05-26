@@ -533,7 +533,7 @@ QScrollBar::sub-page:vertical
     <property name="geometry">
      <rect>
       <x>685</x>
-      <y>300</y>
+      <y>335</y>
       <width>230</width>
       <height>30</height>
      </rect>
@@ -558,8 +558,8 @@ QScrollBar::sub-page:vertical
    <widget class="QLineEdit" name="line_gain">
     <property name="geometry">
      <rect>
-      <x>685</x>
-      <y>365</y>
+      <x>690</x>
+      <y>400</y>
       <width>80</width>
       <height>25</height>
      </rect>
@@ -568,8 +568,8 @@ QScrollBar::sub-page:vertical
    <widget class="QPushButton" name="set_gain">
     <property name="geometry">
      <rect>
-      <x>775</x>
-      <y>365</y>
+      <x>780</x>
+      <y>400</y>
       <width>80</width>
       <height>25</height>
      </rect>
@@ -581,8 +581,8 @@ QScrollBar::sub-page:vertical
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>685</x>
-      <y>340</y>
+      <x>690</x>
+      <y>375</y>
       <width>230</width>
       <height>20</height>
      </rect>
@@ -594,8 +594,8 @@ QScrollBar::sub-page:vertical
    <widget class="QLineEdit" name="line_threshold">
     <property name="geometry">
      <rect>
-      <x>685</x>
-      <y>425</y>
+      <x>690</x>
+      <y>460</y>
       <width>80</width>
       <height>25</height>
      </rect>
@@ -604,8 +604,8 @@ QScrollBar::sub-page:vertical
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>685</x>
-      <y>400</y>
+      <x>690</x>
+      <y>435</y>
       <width>230</width>
       <height>20</height>
      </rect>
@@ -617,8 +617,8 @@ QScrollBar::sub-page:vertical
    <widget class="QPushButton" name="set_threshold">
     <property name="geometry">
      <rect>
-      <x>775</x>
-      <y>425</y>
+      <x>780</x>
+      <y>460</y>
       <width>80</width>
       <height>25</height>
      </rect>
@@ -834,9 +834,9 @@ QScrollBar::sub-page:vertical
     <property name="geometry">
      <rect>
       <x>680</x>
-      <y>225</y>
+      <y>200</y>
       <width>240</width>
-      <height>271</height>
+      <height>331</height>
      </rect>
     </property>
    </widget>
@@ -902,7 +902,7 @@ QScrollBar::sub-page:vertical
     <property name="geometry">
      <rect>
       <x>680</x>
-      <y>500</y>
+      <y>540</y>
       <width>201</width>
       <height>81</height>
      </rect>
@@ -917,8 +917,8 @@ QScrollBar::sub-page:vertical
    <widget class="QPushButton" name="calibrate">
     <property name="geometry">
      <rect>
-      <x>685</x>
-      <y>460</y>
+      <x>690</x>
+      <y>495</y>
       <width>230</width>
       <height>30</height>
      </rect>
@@ -1106,6 +1106,19 @@ QScrollBar::sub-page:vertical
      <string>K2 = </string>
     </property>
    </widget>
+   <widget class="QPushButton" name="delta_chart">
+    <property name="geometry">
+     <rect>
+      <x>685</x>
+      <y>300</y>
+      <width>230</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delta Chart</string>
+    </property>
+   </widget>
    <zorder>listView</zorder>
    <zorder>reset_roi</zorder>
    <zorder>set_roi</zorder>
@@ -1159,6 +1172,7 @@ QScrollBar::sub-page:vertical
    <zorder>params_V0</zorder>
    <zorder>params_K1</zorder>
    <zorder>params_K2</zorder>
+   <zorder>delta_chart</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

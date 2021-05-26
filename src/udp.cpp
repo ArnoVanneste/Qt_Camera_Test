@@ -22,6 +22,16 @@ Udp::Udp()
 
     this->fpsCounter->start(1000);
 
+    this->deltaCounter = new QTimer(this);
+
+    connect(this->deltaCounter, &QTimer::timeout, this, [&]() {
+
+        this->dCounter = this->delta;
+
+    });
+
+    this->deltaCounter->start(10);
+
 }
 
 Udp::~Udp() {
@@ -70,6 +80,10 @@ int Udp::getFps(void) {
     return this->fps;
 }
 
+int Udp::getDelta(void) {
+    return this->dCounter;
+}
+
 void Udp::readyRead()
 {
     mutex.lock();
@@ -113,6 +127,17 @@ void Udp::readyRead()
                 if (lijnnr<vorigelijnnr) {
                     emit Udp::hasToRender();
                     this->counter++;
+
+                    this->curTime = QTime::currentTime().toString("zzz");
+
+                    if((this->curTime.toInt() - this->prevTime.toInt()) < 0) {
+                        this->delta = 1000 - this->prevTime.toInt() + this->curTime.toInt();
+                    } else {
+                        this->delta = this->curTime.toInt() - this->prevTime.toInt();
+                    }
+
+//                    qDebug() << delta;
+                    this->prevTime = this->curTime;
                 }
             }
             vorigelijnnr=lijnnr;

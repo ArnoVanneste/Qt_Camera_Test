@@ -36,9 +36,12 @@ MainWindow::MainWindow(QWidget *parent)
         ui->lable_fw->setText("Firmware version: " + QString::number(server->fwVersion / 256) + "." + QString::number(server->fwVersion % 256));
         ui->lable_hw->setText("Hardware version: " + QString::number(server->hwVersion % 256));
 
-        this->fpsChart->setFps(server->getFps());
+//        this->fpsChart->setFps(server->getFps());
+        this->deltaChart->setDelta(server->getDelta());
 
     });
+
+
 
     timer->start(1000);
 
@@ -57,7 +60,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->curCamMode = ECameraModes::PICTURE_MODE;
 
-    this->fpsChart = new FpsChart();
+//    this->fpsChart = new FpsChart();
+    this->deltaChart = new DeltaChart();
 
     QPixmap logo("D:\\repos\\Qt_Camera_Test\\src\\img\\marelec_30.png");
     ui->logo->setPixmap(logo);
@@ -179,7 +183,7 @@ void MainWindow::on_switch_mode_clicked()
 
 void MainWindow::on_fps_chart_clicked()
 {
-    this->fpsChart->show();
+//    this->fpsChart->show();
 }
 
 void MainWindow::on_test_clicked()
@@ -259,22 +263,7 @@ void MainWindow::on_calibrate_clicked()
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void MainWindow::on_delta_chart_clicked()
+{
+    this->deltaChart->show();
+}

@@ -26,6 +26,7 @@ const std::vector<cv::Point2f>& Checkerboardtest::calc(const QImage& image) {
                     cv::Size(CHECKERBOARD[0], CHECKERBOARD[1]),
                     corner_pts,
                     cv::CALIB_CB_ADAPTIVE_THRESH |
+//                    cv::CALIB_CB_FILTER_QUADS |
 //                    cv::CALIB_CB_FAST_CHECK |
                     cv::CALIB_CB_NORMALIZE_IMAGE);
 

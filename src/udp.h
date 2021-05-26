@@ -9,6 +9,8 @@
 #include <QThread>
 #include <QMutex>
 #include <QTimer>
+#include <QDateTime>
+#include <QTime>
 class Udp : public QObject
 {
     Q_OBJECT
@@ -23,6 +25,7 @@ public:
     QMutex mutex;
 
     int getFps(void);
+    int getDelta(void);
 
 signals:
     void hasToRender();
@@ -94,10 +97,15 @@ private:
     int badPixels = 0;
     int gain = 0;
     int threshold;
+    int delta = 0;
+    int dCounter = 0;
+    QString prevTime ="0";
+    QString curTime = "0";
 
     QDateTime time;
 
     QTimer *fpsCounter;
+    QTimer *deltaCounter;
 
     int ipnr;
     bool geenAntwoord;

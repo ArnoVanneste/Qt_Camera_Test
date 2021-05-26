@@ -10,7 +10,8 @@
 #include "customlable.h"
 #include "udp.h"
 #include "checkerboardtest.h"
-#include "fpschart.h"
+//#include "fpschart.h"
+#include "deltachart.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -41,7 +42,8 @@ private:
     QPixmap pix;
     QImage image;
     ECameraModes curCamMode;
-    FpsChart *fpsChart;
+//    FpsChart *fpsChart;
+    DeltaChart *deltaChart;
 
     std::vector<QString> timeStamps;
 
@@ -63,5 +65,6 @@ private slots:
     void on_reset_roi_clicked();
     void on_confirm_roi_clicked();
     void on_calibrate_clicked();
+    void on_delta_chart_clicked();
 };
 #endif // MAINWINDOW_H
