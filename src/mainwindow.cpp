@@ -6,7 +6,6 @@
 #include <QPixmap>
 #include <QThread>
 #include <iostream>
-#include <calibration.h>
 
 #include <chrono>
 
@@ -36,8 +35,8 @@ MainWindow::MainWindow(QWidget *parent)
         ui->lable_fw->setText("Firmware version: " + QString::number(server->fwVersion / 256) + "." + QString::number(server->fwVersion % 256));
         ui->lable_hw->setText("Hardware version: " + QString::number(server->hwVersion % 256));
 
-//        this->fpsChart->setFps(server->getFps());
-        this->deltaChart->setDelta(server->getDelta());
+        this->fpsChart->setFps(server->getFps());
+        this->fpsChart->setDelta(server->getDelta());
 
     });
 
@@ -50,9 +49,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     chtimer = new QTimer(this);
 
+    this->singleShot = false;
     connect(chtimer, &QTimer::timeout, this, [&]() {
 
-        this->renderPoints(boardtest->calc(getImage()));
+        if (!singleShot) {
+            this->renderPoints(boardtest->calc(getImage()));
+            singleShot = true;
+        }
 
     });
 
@@ -60,17 +63,67 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->curCamMode = ECameraModes::PICTURE_MODE;
 
-//    this->fpsChart = new FpsChart();
-    this->deltaChart = new DeltaChart();
+    this->fpsChart = new FpsChart();
+//    this->deltaChart = new DeltaChart();
 
     QPixmap logo("D:\\repos\\Qt_Camera_Test\\src\\img\\marelec_30.png");
     ui->logo->setPixmap(logo);
     ui->logo->setStyleSheet("background-color: rgba(0,0,0,0%)");
 
+    // connection test
+
+    this->green = QPixmap("D:\\repos\\troubleshoot\\Qt_Camera_Test\\img\\green_light_12.png");
+    this->red = QPixmap("D:\\repos\\troubleshoot\\Qt_Camera_Test\\img\\red_light_1_18x18.png");
+
+    ui->status->setPixmap(red);
+    ui->status->setStyleSheet("background-color: rgba(0,0,0,0%)");
+
+    this->tcpClient = new TcpIp(inet_addr(""));
+    this->connectionStatus = new QThread(this);
+
+//    if (tcpClient->isConnected()) {
+//        ui->status->setPixmap(green);
+//        qDebug() << "connection established";
+
+//        this->conn = this->tcpClient;
+//        this->tcpClient->start();
+
+//        QString buffer("\\*.*");
+//        DIRINFO info;
+//        if (this->conn->findFirstRemoteFile((char *)buffer.toStdString().c_str(),&info)) {
+
+//            do {
+
+//                qDebug() << info.fname;
+
+//            } while (this->conn->findNextRemoteFile(&info));
+
+//            download((char *)"\\Hard Disk\\PARAMS.TXT", (char *)"d:\\PARAMS.txt");
+
+//            upload((char *)"d:\\TEST.txt", (char *)"\\Hard Disk\\TEST.TXT");
+
+//        }
+
+//    }
+
+//    Qt::HANDLE pid = QThread::currentThreadId();
+//    qDebug() << "t";
+
 }
 
 MainWindow::~MainWindow()
 {
+
+    if(this->tcpClient) {
+
+        this->connectionStatus->quit();
+        this->connectionStatus->wait();
+
+        delete this->tcpClient;
+
+    }
+
+//    delete this->conn;
     read.quit();
     read.wait();
     delete ui;
@@ -97,6 +150,14 @@ void MainWindow::hasToRender()
     }
 }
 
+void MainWindow::statusUpdate(bool connected) {
+    if (connected) {
+        ui->status->setPixmap(green);
+    } else {
+        ui->status->setPixmap(red);
+    }
+}
+
 void MainWindow::renderPoints(const std::vector<cv::Point2f>& points) const {
 
     ui->label_img->setPoints(points);
@@ -105,7 +166,16 @@ void MainWindow::renderPoints(const std::vector<cv::Point2f>& points) const {
 }
 
 QImage MainWindow::getImage(void) const {
-    return this->image;
+
+    if (server->mutex.tryLock()) {
+
+        QImage temp = QImage((const unsigned char *)server->getBuffer(), 1280, 1024, QImage::Format_Grayscale8);
+        server->mutex.unlock();
+        return temp;
+
+    }
+
+    return QImage();
 
 }
 
@@ -117,10 +187,10 @@ void MainWindow::setmode (ECameraModes mode) {
 void MainWindow::on_find_corners_clicked(bool checked)
 {
     if (checked) {
-        chtimer->start(500);
+        this->chtimer->start(500);
         ui->label_img->drawPoints = true;
     } else {
-        chtimer->stop();
+        this->chtimer->stop();
         ui->label_img->drawPoints = false;
     }
 }
@@ -183,7 +253,7 @@ void MainWindow::on_switch_mode_clicked()
 
 void MainWindow::on_fps_chart_clicked()
 {
-//    this->fpsChart->show();
+    this->fpsChart->show();
 }
 
 void MainWindow::on_test_clicked()
@@ -239,31 +309,130 @@ void MainWindow::on_confirm_roi_clicked()
 
 void MainWindow::on_calibrate_clicked()
 {
-    Calibration c;
-    const std::vector<cv::Point2f>& points = boardtest->calc(getImage());
-//    char * camera_image = (char *)malloc(sizeof(char)*1024*1280);
-//    this->server->getBufferCoppy(camera_image);
-    bool succes = c.Calibrate((char *)server->getBuffer(), 1280, 1024, {{points[65].x, points[65].y}, {points[5].x, points[5].y}, {points[60].x, points[60].y}, {points[0].x, points[0].y}}, 10);
-    if (succes) {
-        Characteristics oc = c.m_optimized_characteristics;
+//    if (boardtest->calc(getImage()) != nullptr);
 
-        ui->params_a->setText("A = " + QString::number(oc.m_A));
-        ui->params_b->setText("B = " + QString::number(oc.m_B));
-        ui->params_c->setText("C = " + QString::number(oc.m_C));
-        ui->params_d->setText("D = " + QString::number(oc.m_D));
-        ui->params_e->setText("E = " + QString::number(oc.m_E));
-        ui->params_f->setText("F = " + QString::number(oc.m_F));
-        ui->params_g->setText("G = " + QString::number(oc.m_G));
-        ui->params_h->setText("H = " + QString::number(oc.m_H));
-        ui->params_i->setText("I = " + QString::number(oc.m_I));
-        ui->params_U0->setText("U0 = " + QString::number(oc.m_U0));
-        ui->params_V0->setText("V0 = " + QString::number(oc.m_V0));
-        ui->params_K1->setText("K1 = " + QString::number(oc.m_K1));
-        ui->params_K2->setText("K2 = " + QString::number(oc.m_K2));
-    }
+    QThread *calibrate = QThread::create([&](){
+
+        Calibration c;
+        const std::vector<cv::Point2f>& points = boardtest->calc(getImage());
+    //    char * camera_image = (char *)malloc(sizeof(char)*1024*1280);
+    //    this->server->getBufferCoppy(camera_image);
+        bool succes = c.Calibrate((char *)server->getBuffer(), 1280, 1024, {{points[65].x, points[65].y}, {points[5].x, points[5].y}, {points[60].x, points[60].y}, {points[0].x, points[0].y}}, 10);
+        if (succes) {
+            Characteristics oc = c.m_optimized_characteristics;
+
+            ui->params_a->setText("A = " + QString::number(oc.m_A));
+            ui->params_b->setText("B = " + QString::number(oc.m_B));
+            ui->params_c->setText("C = " + QString::number(oc.m_C));
+            ui->params_d->setText("D = " + QString::number(oc.m_D));
+            ui->params_e->setText("E = " + QString::number(oc.m_E));
+            ui->params_f->setText("F = " + QString::number(oc.m_F));
+            ui->params_g->setText("G = " + QString::number(oc.m_G));
+            ui->params_h->setText("H = " + QString::number(oc.m_H));
+            ui->params_i->setText("I = " + QString::number(oc.m_I));
+            ui->params_U0->setText("U0 = " + QString::number(oc.m_U0));
+            ui->params_V0->setText("V0 = " + QString::number(oc.m_V0));
+            ui->params_K1->setText("K1 = " + QString::number(oc.m_K1));
+            ui->params_K2->setText("K2 = " + QString::number(oc.m_K2));
+        }
+
+    });
+
+    calibrate->start();
+
 }
 
 void MainWindow::on_delta_chart_clicked()
 {
-    this->deltaChart->show();
+//    this->deltaChart->show();
+}
+
+void MainWindow::download(char *remoteFile, char *localFile) {
+    char path[1024];
+    GetTempPathA(1023,path);
+    char fname[1024];
+    char buffer[16385];
+    sprintf(buffer,"GET %s",remoteFile);
+    this->conn->addFrame(6,strlen(buffer),buffer);
+
+    int i=GetTempFileNameA(path,"",0,fname);
+    this->conn->file=fopen(fname,"wb");
+    while (this->conn->file) {
+        Sleep(2000);
+    }
+
+//    if (DialogBox(hInst,MAKEINTRESOURCE(IDD_TRANSFER),hDlg,(DLGPROC)transferDialog)) {
+        DeleteFileA(localFile);
+        MoveFileA(fname,localFile);
+        HANDLE h=CreateFileA(localFile,GENERIC_WRITE,FILE_SHARE_READ|FILE_SHARE_WRITE,0,OPEN_EXISTING,0,0);
+        SetFileTime(h,&this->conn->fileTime,0,0);
+        CloseHandle(h);
+//    } else {
+//        //cancel
+//        con->addFrame(6,1,"2");
+//        DeleteFile(fname);
+//    }
+}
+
+void MainWindow::upload(char *localFile, char *remoteFile) {
+    HANDLE h=CreateFileA(localFile,GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,0,OPEN_EXISTING,0,0);
+    GetFileTime(h,&this->conn->fileTime,0,0);
+    this->conn->fsize=GetFileSize(h,0);
+    CloseHandle(h);
+    FILE *f=fopen(localFile,"rb");
+    char buffer[16385];
+    sprintf(buffer,"PUT %s",remoteFile);
+    this->conn->addFrame(6,strlen(buffer),buffer);
+    sprintf(buffer,"3%u;%u;%u",this->conn->fsize,this->conn->fileTime.dwHighDateTime,this->conn->fileTime.dwLowDateTime);
+    this->conn->addFrame(6,strlen(buffer),buffer);
+
+    char *_buffer=(char *)malloc(16385);
+    _buffer[0]='1';
+    int i=fread(&_buffer[1],1,16384,f);
+    if (i) {
+        this->conn->addFrameBuffer(6,i+1,_buffer);
+    }
+
+    this->conn->addFrame(6,1,"0");
+
+
+//    if (DialogBoxParam(hInst,MAKEINTRESOURCE(IDD_TRANSFER),hDlg,(DLGPROC)transferDialog,(long)f))
+//        con->addFrame(6,1,"0");
+//    else
+//        con->addFrame(6,1,"2");
+
+}
+
+void MainWindow::on_connect_clicked()
+{
+    if(this->tcpClient) {
+
+//        this->connectionStatus.quit();
+//        this->connectionStatus.wait();
+
+        // Disconnect signal slot
+
+        delete this->tcpClient;
+
+    }
+
+    this->tcpClient = new TcpIp(inet_addr(ui->line_connect->text().toStdString().c_str()));
+
+    this->tcpClient->moveToThread(this->connectionStatus);
+    connect(this->tcpClient, &Connection::sendStatusUpdate, this, &MainWindow::statusUpdate);
+    this->connectionStatus->start();
+
+
+    if (tcpClient->isConnected()) {
+        qDebug() << "connection established";
+        this->conn = this->tcpClient;
+        this->tcpClient->start();
+    }
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+        download((char *)"\\Hard Disk\\PARAMS.TXT", (char *)"d:\\PARAMS.txt");
+
+        upload((char *)"d:\\TEST.txt", (char *)"\\Hard Disk\\TEST.TXT");
 }

@@ -1,4 +1,8 @@
 #include "customlable.h"
+
+#include <QThread>
+#include <QDebug>
+
 Customlable::Customlable(QWidget *parent)
     : QLabel(parent)
 {

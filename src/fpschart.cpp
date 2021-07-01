@@ -8,13 +8,17 @@ FpsChart::FpsChart(QWidget *parent) :
     ui->setupUi(this);
     this->fps = 0;
     ui->mPlot->addGraph(); // blue line
-    ui->mPlot->graph(0)->setPen(QPen(QColor(40, 110, 255)));
+    ui->mPlot->graph(0)->setPen(QPen(QColor(0, 0, 255)));
+
+    this->delta = 0;
+    ui->mPlot->addGraph();
+    ui->mPlot->graph(0)->setPen(QPen(QColor(255, 0, 0)));
 
     this->timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
     this->timeTicker->setTimeFormat("%h:%m:%s");
     ui->mPlot->xAxis->setTicker(this->timeTicker);
     ui->mPlot->axisRect()->setupFullAxesBox();
-    ui->mPlot->yAxis->setRange(0, 150);
+    ui->mPlot->yAxis->setRange(0, 75);
 
     // make left and bottom axes transfer their ranges to right and top axes:
     connect(ui->mPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), ui->mPlot->xAxis2, SLOT(setRange(QCPRange)));
@@ -35,6 +39,7 @@ void FpsChart::realtimeDataSlot()
 {
     static QElapsedTimer timer;
     ui->mPlot->graph(0)->addData(timer.elapsed()/1000, this->fps);
+    ui->mPlot->graph(1)->addData(timer.elapsed()/1000, this->delta);
     ui->mPlot->xAxis->setRange(timer.elapsed()/1000, 100, Qt::AlignCenter);
     ui->mPlot->replot();
 }
@@ -45,4 +50,22 @@ int FpsChart::getFps() {
 
 void FpsChart::setFps(const int fps) {
     this->fps = fps;
+}
+
+int FpsChart::getDelta() {
+    return delta;
+}
+
+void FpsChart::setDelta(const int delta) {
+    this->delta = delta;
+}
+
+void FpsChart::on_fps_clicked()
+{
+    ui->mPlot->graph(0)->setVisible(!ui->mPlot->graph(0)->visible());
+}
+
+void FpsChart::on_delta_clicked()
+{
+    ui->mPlot->graph(1)->setVisible(!ui->mPlot->graph(1)->visible());
 }

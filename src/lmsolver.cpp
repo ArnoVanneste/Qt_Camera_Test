@@ -25,7 +25,8 @@ OptimizationResult LMSolver::Solve(
 
     lm_status_struct stat;
 
-    double *optimized_parameters = (double *)malloc((sizeof(parameters)/sizeof(*parameters)) * sizeof(double));
+    //double *optimized_parameters = (double *)malloc((sizeof(parameters)/sizeof(*parameters)) * sizeof(double));
+    double *optimized_parameters = (double *)malloc(12 * sizeof(double));
     PtrDeepCopy<double>(parameters, optimized_parameters, 12);
 
     lmmin(

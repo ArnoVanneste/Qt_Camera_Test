@@ -17,12 +17,20 @@ public:
     int getFps();
     void setFps(const int fps);
 
+    int getDelta(void);
+    void setDelta(const int delta);
+
 private slots:
     void realtimeDataSlot();
+
+    void on_fps_clicked();
+
+    void on_delta_clicked();
 
 private:
     Ui::FpsChart *ui;
     QTimer *dataTimer;
     QSharedPointer<QCPAxisTickerTime> timeTicker;
     int fps;
+    int delta;
 };

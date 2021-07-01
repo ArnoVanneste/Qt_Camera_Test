@@ -4,6 +4,8 @@
 #include <lmsolver.h>
 #include <helpers.h>
 
+#include <QThread>
+
 #include <cstdlib>
 #include <cmath>
 
@@ -11,6 +13,8 @@
 
 std::vector<std::pair<double, double> > Calibration::m_calibration_pixel_data;
 std::vector<std::pair<double, double> > Calibration::m_calibration_space_data;
+
+unsigned Calibration::num_samples = 0;
 
 Calibration::Calibration()
 {
@@ -198,6 +202,8 @@ bool Calibration::Calibrate(
     > corner_points,
     int search_radius)
 {
+    qDebug() << "Calibration Thread id: " << QThread::currentThreadId();
+
     this->Reset();
 
     // approximate location of the corners, as indicated by the user
@@ -239,8 +245,13 @@ bool Calibration::Calibrate(
         };
 
         Characteristics estimated = Characteristics::FirstEstimation(pixel_coords, space_coords, width, height);
-        m_calibration_space_data.reserve((this->calc_grid.num_rows + 1) * (this->calc_grid.num_columns + 1));
-        m_calibration_pixel_data.reserve(m_calibration_space_data.capacity());
+        // m_calibration_space_data.reserve((this->calc_grid.num_rows + 1) * (this->calc_grid.num_columns + 1));
+        // m_calibration_pixel_data.reserve(m_calibration_space_data.capacity());
+
+        m_calibration_space_data.clear();
+        m_calibration_pixel_data.clear();
+        num_samples = 0;
+
         //generate a full virtual replica of the calibration board
         for (int row = 0; row <= this->calc_grid.num_rows; ++row)
         {
@@ -254,9 +265,9 @@ bool Calibration::Calibrate(
                 int v = (int)est_pixel.second;
                 Calibration::FindCorner(camera_image, width, height, u, v, search_radius);
                 std::pair<double, double> found_pixel {u, v};
-                m_calibration_space_data[Globals::num_samples] = space;
-                m_calibration_pixel_data[Globals::num_samples] = found_pixel;
-                Globals::num_samples++;
+                m_calibration_space_data.push_back(space);
+                m_calibration_pixel_data.push_back(found_pixel);
+                num_samples++;
             }
         }
 
@@ -275,7 +286,7 @@ bool Calibration::Calibrate(
         parameters[11] = estimated.m_K2;
 
         LMSolver solver(1e-20, 1e-20, 1e-20);
-        OptimizationResult optimized_result = solver.Solve(Evaluate, parameters, Globals::num_samples);
+        OptimizationResult optimized_result = solver.Solve(Evaluate, parameters, num_samples);
         m_optimized_characteristics = Characteristics(
             optimized_result.m_optimized_parameters[0],
             optimized_result.m_optimized_parameters[1],

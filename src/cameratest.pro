@@ -28,7 +28,6 @@ SOURCES += \
     qcustomplot.cpp
 
 HEADERS += \
-    StdAfx.h \
     connection.h \
     deltachart.h \
     lmmin.h \
@@ -45,7 +44,6 @@ HEADERS += \
     fpschart.h \
     mainwindow.h \
     paramtransfer.h \
-    resource.h \
     solverstatus.h \
     tcpip.h \
     udp.h \
@@ -66,6 +64,8 @@ LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_imgcodecs451.dll
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_imgproc451.dll
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_features2d451.dll
 LIBS += D:\Software\OpenCV\opencv\build\bin\libopencv_calib3d451.dll
+
+LIBS += -lws2_32
 #LIBS += D:\Vives\Stage\lmfit\lmfit32.dll
 
 # Default rules for deployment.

@@ -61,6 +61,8 @@ public:
     static std::vector<std::pair<double, double> > m_calibration_space_data;
     static std::vector<std::pair<double, double> > m_calibration_pixel_data;
     Characteristics m_optimized_characteristics;
+
+    static unsigned num_samples;
 };
 
 #endif // CALIBRATION_H

@@ -1,5 +1,4 @@
 #include "udp.h"
-#include <QThread>
 #include <iostream>
 
 #include <windows.h>
@@ -32,11 +31,19 @@ Udp::Udp()
 
     this->deltaCounter->start(10);
 
+    qDebug() << "UDP Server Thread id: " << QThread::currentThreadId();
+
 }
 
 Udp::~Udp() {
 
 
+
+}
+
+void Udp::testCallback() {
+
+    qDebug() << "hello thread: " << QThread::currentThreadId();
 
 }
 
@@ -86,6 +93,8 @@ int Udp::getDelta(void) {
 
 void Udp::readyRead()
 {
+    Qt::HANDLE pid = QThread::currentThreadId();
+
     mutex.lock();
 
     quint16 senderPort;
@@ -115,7 +124,7 @@ void Udp::readyRead()
         } else if (lijnnr==0x5555) {
             memcpy(&laser[700],&s[1],i);
         } else {
-            if (((lijnnr*1280)+i)<=(1024*1280)) {                   
+            if (((lijnnr*1280)+i)<=(1024*1280)) {
 //                memcpy(&bitmap[lijnnr*1280],&s[1],i);
 
                 int index = ((getTopleftY() + lijnnr) * 1280) + getTopleftX();

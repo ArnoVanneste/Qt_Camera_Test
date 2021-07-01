@@ -29,12 +29,14 @@ public:
 
 signals:
     void hasToRender();
+    void testSignal();
 
 public slots:
     void sendDataImg(QString addr);
     void sendDataLaser(QString addr);
     void readyRead();
     void chooseCam();
+    void testCallback();
 
 public:
     int fwVersion = 0;
@@ -111,6 +113,8 @@ private:
     bool geenAntwoord;
 
     QString currentTime;
+
+    QThread testThread;
 };
 
 #endif // UDPSERVER_H
